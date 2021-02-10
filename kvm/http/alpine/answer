@@ -1,0 +1,18 @@
+# Example answer file for setup-alpine script
+# If you don't want to use a certain option, then comment it out
+# Use US layout with US variant
+KEYMAPOPTS="us us"
+HOSTNAMEOPTS="-n alpine"
+INTERFACESOPTS="auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+    hostname alpine
+"
+TIMEZONEOPTS="-z America/Argentina/Buenos_Aires"
+PROXYOPTS="none"
+APKREPOSOPTS="-1"
+SSHDOPTS="-c openssh"
+NTPOPTS="-c none"
+DISKOPTS="-m sys /dev/vda"

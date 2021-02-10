@@ -1,0 +1,38 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Run alpine creation
+      command: /usr/bin/packer build -force alpine-docker.json 
+      args:
+        chdir: /mnt/NAS/scripts/packerlocal/openstack/       
+#CREAR INSTANCIA CON LA IMAGEN ANTES CREADA
+#
+#    - name : Create a new instance
+#      os_server:
+#        state: present
+#        auth:
+#          auth_url: http://controller:5000
+#          username: admin
+#          password: openstack
+#          project_name: admin
+#          domain_name: Default
+#        name: vm1
+#        availability_zone: nova
+#        image: Alpine-Docker
+#        flavor: 38df70fa-c060-427f-8688-cfb7e14ceeba
+#        security_groups: default
+#        floating_ips:
+#          - 192.168.50.132
+#        nics:
+#          - net-name: int
+#BORRAR LA IMAGEN ANTES CREADA
+#    - name : Delete old alpine image in openstack
+#      os_image:
+#        auth:
+#          auth_url: http://controller:5000
+#          username: admin
+#          password: openstack
+#          project_name: admin
+#          domain_name: Default
+#        name: Alpine-Docker
+#        state: absent

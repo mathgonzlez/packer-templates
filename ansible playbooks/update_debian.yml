@@ -1,0 +1,33 @@
+---
+- hosts: localhost
+  vars:
+   - vm_name: debian10
+   - debian_file: /mnt/NAS/images/debian/debian10
+  tasks:
+    - name: Create debian Vm and run scripts
+      command: /usr/bin/packer build -force debian.json
+      args:
+        chdir: /mnt/NAS/gitlab/packer-templates/kvm/
+    - name: Delete old debian image in openstack
+      os_image:
+        auth:
+          auth_url: http://controller:5000
+          username: admin
+          password: openstack
+          project_name: admin
+          domain_name: Default
+        name: "{{ vm_name }}"
+        state: absent
+    - name: Upload debian image to openstack
+      os_image:
+        auth:
+          auth_url: http://controller:5000
+          username: admin
+          password: openstack
+          project_name: admin
+          domain_name: Default
+        name: "{{ vm_name }}"
+        state: present
+        container_format: bare
+        disk_format: qcow2
+        filename: "{{ debian_file }}"

@@ -1,0 +1,33 @@
+---
+- hosts: localhost
+  vars:
+   - vm_name: rhel8.3
+   - rhel_file: /mnt/NAS/images/rhel8/Rhel8.3
+  tasks:
+    - name: Create Alpine Vm and run scripts
+      command: /usr/bin/packer build -force rhel8.json
+      args:
+        chdir: /mnt/NAS/gitlab/packer-templates/kvm/
+    - name : Delete old alpine image in openstack
+      os_image:
+        auth:
+          auth_url: http://controller:5000
+          username: admin
+          password: openstack
+          project_name: admin
+          domain_name: Default
+        name: "{{ vm_name }}"
+        state: absent
+    - name : Upload alpine image to openstack
+      os_image:
+        auth:
+          auth_url: http://controller:5000
+          username: admin
+          password: openstack
+          project_name: admin
+          domain_name: Default
+        name: "{{ vm_name }}"
+        state: present
+        container_format: bare
+        disk_format: qcow2
+        filename: "{{ rhel_file }}"
